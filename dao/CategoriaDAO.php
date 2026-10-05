@@ -17,7 +17,14 @@ class CategoriaDAO
 
     private function texto(string $texto): string
     {
-        return mb_strtoupper(trim($texto));
+        return $this->maiusculo(trim($texto));
+    }
+
+    private function maiusculo(string $texto): string
+    {
+        return function_exists('mb_strtoupper')
+            ? mb_strtoupper($texto)
+            : strtoupper($texto);
     }
 
     public function salvar(Categoria $categoria): bool
@@ -121,7 +128,7 @@ class CategoriaDAO
                      WHERE nome LIKE ?
                   ORDER BY nome ASC";
 
-                $valorPesquisa = mb_strtoupper($valor) . "%";
+                $valorPesquisa = $this->maiusculo($valor) . "%";
             } else if ($campo == "informacoes") {
 
                 $sql = "SELECT *
@@ -129,7 +136,7 @@ class CategoriaDAO
                      WHERE informacoes LIKE ?
                   ORDER BY nome ASC";
 
-                $valorPesquisa = "%" . mb_strtoupper($valor) . "%";
+                $valorPesquisa = "%" . $this->maiusculo($valor) . "%";
             } else {
                 $sql = "";
                 $valorPesquisa = "";
