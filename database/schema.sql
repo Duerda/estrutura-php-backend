@@ -1,6 +1,13 @@
 CREATE DATABASE IF NOT EXISTS bd_backend CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE bd_backend;
 
+CREATE TABLE IF NOT EXISTS categoria (
+    id INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(150) NOT NULL,
+    informacoes VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE IF NOT EXISTS cliente (
     id INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(150) NOT NULL,
