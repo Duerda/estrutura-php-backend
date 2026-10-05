@@ -1,0 +1,9 @@
+ROTEIRO DO VÍDEO DEMONSTRATIVO
+
+1. Abrir a aplicação e mostrar o menu Clientes.
+2. Cadastrar um cliente com nome, e-mail e telefone.
+3. Mostrar o registro na listagem.
+4. Clicar no lápis, alterar o telefone e salvar.
+5. Confirmar na listagem que o dado foi atualizado.
+6. Repetir o fluxo para Fornecedores, mostrando razão social, e-mail e telefone.
+7. Mostrar rapidamente o arquivo metodos-utilizados.txt e o README.

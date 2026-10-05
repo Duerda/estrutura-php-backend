@@ -1,0 +1,37 @@
+MÉTODOS UTILIZADOS – EDIÇÃO DE CLIENTE E FORNECEDOR
+
+1. GETTERS E SETTERS
+   - Encapsulam os atributos dos modelos Cliente e Fornecedor.
+   - Os setters fazem trim dos valores recebidos.
+
+2. ClienteController::salvar() e FornecedorController::salvar()
+   - Lêem os campos enviados por POST e delegam a persistência ao DAO.
+
+3. ClienteController::alterar() e FornecedorController::alterar()
+   - Recebem o id oculto do formulário, carregam os novos dados e chamam salvar().
+
+4. ClienteDAO::salvar() e FornecedorDAO::salvar()
+   - Usam INSERT quando o id é nulo e UPDATE quando existe id.
+   - Usam prepared statements e bindValue para evitar SQL Injection.
+
+5. listar()
+   - Executa SELECT ordenado e retorna os registros para as tabelas.
+
+6. buscarPorId()
+   - Busca um registro pelo id para preencher o formulário de edição.
+
+7. excluir()
+   - Remove o registro selecionado pelo id.
+
+8. filter_input()
+   - Lê e valida entradas GET/POST da aplicação.
+
+9. htmlspecialchars()
+   - Escapa valores exibidos no HTML, evitando XSS.
+
+Fluxo da edição:
+1. Usuário clica em Editar na listagem.
+2. A view busca o registro pelo id com buscarPorId().
+3. O formulário é preenchido com os dados atuais.
+4. Ao salvar, o controller executa alterar().
+5. O DAO executa UPDATE ... WHERE id=? e a listagem exibe os dados atualizados.
