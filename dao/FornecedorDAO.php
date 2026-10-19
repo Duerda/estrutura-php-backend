@@ -34,6 +34,16 @@ class FornecedorDAO
         return $this->conn->query('SELECT * FROM fornecedor ORDER BY razao_social')->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function pesquisarPorRazaoSocial(string $razaoSocial): array
+    {
+        $stmt = $this->conn->prepare(
+            'SELECT id, razao_social, email, telefone FROM fornecedor WHERE razao_social LIKE :razao_social ORDER BY razao_social'
+        );
+        $stmt->bindValue(':razao_social', '%' . $this->texto($razaoSocial) . '%', PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function buscarPorId(int $id): ?Fornecedor
     {
         $stmt = $this->conn->prepare('SELECT * FROM fornecedor WHERE id = ?');

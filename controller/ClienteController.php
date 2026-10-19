@@ -29,6 +29,7 @@ class ClienteController
     }
 
     public function listar(): array { return $this->dao->listar(); }
+    public function pesquisar(string $nome): array { return $this->dao->pesquisarPorNome($nome); }
     public function buscarPorId(int $id): ?Cliente { return $this->dao->buscarPorId($id); }
     public function excluir(int $id): bool { return $this->dao->excluir($id); }
 }

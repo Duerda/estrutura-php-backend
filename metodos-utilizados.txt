@@ -1,37 +1,47 @@
-MÉTODOS UTILIZADOS – EDIÇÃO DE CLIENTE E FORNECEDOR
+MÉTODOS UTILIZADOS – PESQUISA DE CLIENTE E FORNECEDOR
 
-1. GETTERS E SETTERS
-   - Encapsulam os atributos dos modelos Cliente e Fornecedor.
-   - Os setters fazem trim dos valores recebidos.
+1. FORMULÁRIO HTML COM GET
+   - As telas de listagem possuem um campo de busca e um botão Pesquisar.
+   - O formulário envia o termo pelo parâmetro GET "busca", mantendo a pesquisa visível na URL.
+   - O botão Limpar retorna à listagem completa.
 
-2. ClienteController::salvar() e FornecedorController::salvar()
-   - Lêem os campos enviados por POST e delegam a persistência ao DAO.
+2. filter_input()
+   - Lê o parâmetro GET da pesquisa.
+   - O valor é convertido para string e passado por trim() para remover espaços extras.
 
-3. ClienteController::alterar() e FornecedorController::alterar()
-   - Recebem o id oculto do formulário, carregam os novos dados e chamam salvar().
+3. ClienteController::pesquisar()
+   - Recebe o termo informado para o cliente.
+   - Encaminha a operação para ClienteDAO::pesquisarPorNome().
 
-4. ClienteDAO::salvar() e FornecedorDAO::salvar()
-   - Usam INSERT quando o id é nulo e UPDATE quando existe id.
-   - Usam prepared statements e bindValue para evitar SQL Injection.
+4. FornecedorController::pesquisar()
+   - Recebe o termo informado para o fornecedor.
+   - Encaminha a operação para FornecedorDAO::pesquisarPorRazaoSocial().
 
-5. listar()
-   - Executa SELECT ordenado e retorna os registros para as tabelas.
+5. ClienteDAO::pesquisarPorNome()
+   - Executa SELECT id, nome, email, telefone FROM cliente.
+   - Usa WHERE nome LIKE :nome para localizar parte ou todo o nome.
+   - Usa prepared statement e bindValue() para evitar SQL Injection.
+   - Os curingas % são adicionados ao termo antes da execução.
+   - Ordena os resultados por nome.
 
-6. buscarPorId()
-   - Busca um registro pelo id para preencher o formulário de edição.
+6. FornecedorDAO::pesquisarPorRazaoSocial()
+   - Executa SELECT id, razao_social, email, telefone FROM fornecedor.
+   - Usa WHERE razao_social LIKE :razao_social para localizar parte ou toda a razão social.
+   - Usa prepared statement e bindValue() para evitar SQL Injection.
+   - Os curingas % são adicionados ao termo antes da execução.
+   - Ordena os resultados por razão social.
 
-7. excluir()
-   - Remove o registro selecionado pelo id.
+7. fetchAll(PDO::FETCH_ASSOC)
+   - Converte todos os resultados da consulta em um array associativo para a view.
 
-8. filter_input()
-   - Lê e valida entradas GET/POST da aplicação.
+8. htmlspecialchars()
+   - Escapa os dados apresentados nas tabelas e no campo de busca, evitando XSS.
 
-9. htmlspecialchars()
-   - Escapa valores exibidos no HTML, evitando XSS.
-
-Fluxo da edição:
-1. Usuário clica em Editar na listagem.
-2. A view busca o registro pelo id com buscarPorId().
-3. O formulário é preenchido com os dados atuais.
-4. Ao salvar, o controller executa alterar().
-5. O DAO executa UPDATE ... WHERE id=? e a listagem exibe os dados atualizados.
+FLUXO DA PESQUISA:
+1. O usuário acessa Clientes ou Fornecedores.
+2. Informa parte ou todo o nome/razão social e clica em Pesquisar.
+3. A view lê o parâmetro GET "busca".
+4. O controller chama o método de pesquisa do DAO correspondente.
+5. O DAO executa a consulta parametrizada com LIKE.
+6. A view mostra ID, nome/razão social, e-mail, telefone e ações disponíveis.
+7. Caso não haja resultados, a tela informa que nenhum registro foi encontrado.

@@ -34,6 +34,16 @@ class ClienteDAO
         return $this->conn->query('SELECT * FROM cliente ORDER BY nome')->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function pesquisarPorNome(string $nome): array
+    {
+        $stmt = $this->conn->prepare(
+            'SELECT id, nome, email, telefone FROM cliente WHERE nome LIKE :nome ORDER BY nome'
+        );
+        $stmt->bindValue(':nome', '%' . $this->texto($nome) . '%', PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function buscarPorId(int $id): ?Cliente
     {
         $stmt = $this->conn->prepare('SELECT * FROM cliente WHERE id = ?');
