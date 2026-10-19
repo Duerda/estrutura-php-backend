@@ -1,47 +1,35 @@
-MÉTODOS UTILIZADOS – PESQUISA DE CLIENTE E FORNECEDOR
+MÉTODOS UTILIZADOS – PESQUISA NO BACKEND
 
-1. FORMULÁRIO HTML COM GET
-   - As telas de listagem possuem um campo de busca e um botão Pesquisar.
-   - O formulário envia o termo pelo parâmetro GET "busca", mantendo a pesquisa visível na URL.
-   - O botão Limpar retorna à listagem completa.
-
-2. filter_input()
-   - Lê o parâmetro GET da pesquisa.
-   - O valor é convertido para string e passado por trim() para remover espaços extras.
-
-3. ClienteController::pesquisar()
-   - Recebe o termo informado para o cliente.
+1. ClienteController::pesquisar()
+   - Recebe o termo de pesquisa para clientes.
    - Encaminha a operação para ClienteDAO::pesquisarPorNome().
 
-4. FornecedorController::pesquisar()
-   - Recebe o termo informado para o fornecedor.
+2. FornecedorController::pesquisar()
+   - Recebe o termo de pesquisa para fornecedores.
    - Encaminha a operação para FornecedorDAO::pesquisarPorRazaoSocial().
 
-5. ClienteDAO::pesquisarPorNome()
+3. ClienteDAO::pesquisarPorNome()
    - Executa SELECT id, nome, email, telefone FROM cliente.
    - Usa WHERE nome LIKE :nome para localizar parte ou todo o nome.
    - Usa prepared statement e bindValue() para evitar SQL Injection.
-   - Os curingas % são adicionados ao termo antes da execução.
+   - Adiciona os curingas % ao termo recebido.
    - Ordena os resultados por nome.
 
-6. FornecedorDAO::pesquisarPorRazaoSocial()
+4. FornecedorDAO::pesquisarPorRazaoSocial()
    - Executa SELECT id, razao_social, email, telefone FROM fornecedor.
    - Usa WHERE razao_social LIKE :razao_social para localizar parte ou toda a razão social.
    - Usa prepared statement e bindValue() para evitar SQL Injection.
-   - Os curingas % são adicionados ao termo antes da execução.
+   - Adiciona os curingas % ao termo recebido.
    - Ordena os resultados por razão social.
 
-7. fetchAll(PDO::FETCH_ASSOC)
-   - Converte todos os resultados da consulta em um array associativo para a view.
+5. fetchAll(PDO::FETCH_ASSOC)
+   - Converte os resultados das consultas em arrays associativos.
 
-8. htmlspecialchars()
-   - Escapa os dados apresentados nas tabelas e no campo de busca, evitando XSS.
+6. trim()
+   - Remove espaços extras do termo antes da consulta.
 
-FLUXO DA PESQUISA:
-1. O usuário acessa Clientes ou Fornecedores.
-2. Informa parte ou todo o nome/razão social e clica em Pesquisar.
-3. A view lê o parâmetro GET "busca".
-4. O controller chama o método de pesquisa do DAO correspondente.
-5. O DAO executa a consulta parametrizada com LIKE.
-6. A view mostra ID, nome/razão social, e-mail, telefone e ações disponíveis.
-7. Caso não haja resultados, a tela informa que nenhum registro foi encontrado.
+FLUXO DO BACKEND:
+1. A camada de apresentação envia o termo para o controller correspondente.
+2. O controller chama o método de pesquisa do DAO.
+3. O DAO executa a consulta SQL parametrizada com LIKE.
+4. Os registros encontrados são retornados ordenados para a camada de apresentação.

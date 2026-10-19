@@ -11,8 +11,7 @@ Projeto acadêmico de backend PHP com PDO e arquitetura simples em MVC, baseado 
 
 - Cadastro, listagem, edição e exclusão de **Clientes** (`nome`, `email`, `telefone`).
 - Cadastro, listagem, edição e exclusão de **Fornecedores** (`razao_social`, `email`, `telefone`).
-- Pesquisa de clientes por parte ou todo o nome.
-- Pesquisa de fornecedores por parte ou toda a razão social.
+- Métodos de pesquisa de clientes e fornecedores implementados na camada de backend.
 - Formulários de edição preenchidos com os dados atuais.
 - Persistência e pesquisa com PDO e prepared statements.
 - Escape de dados exibidos em HTML com `htmlspecialchars`.
@@ -38,10 +37,10 @@ Projeto acadêmico de backend PHP com PDO e arquitetura simples em MVC, baseado 
 - `?p=add/cliente` / `?p=add/fornecedor`: cadastro.
 - `?p=editar/cliente&id=1` / `?p=editar/fornecedor&id=1`: edição.
 
-A pesquisa é feita pelo formulário da própria listagem. O termo é enviado por `GET` no parâmetro `busca`; quando preenchido, a aplicação chama a consulta com `LIKE` e retorna os registros ordenados pelo nome ou razão social. O botão **Limpar** retorna à listagem completa.
+A pesquisa foi implementada na camada de backend. Os controllers recebem o termo e os DAOs executam consultas parametrizadas com `LIKE`, retornando os registros ordenados pelo nome ou razão social. O front-end original foi preservado.
 
 ## Entrega complementar
 
 - Métodos utilizados: [`metodos-utilizados.txt`](metodos-utilizados.txt).
 - Script de banco: [`database/schema.sql`](database/schema.sql).
-- Vídeo demonstrativo: [`docs/demo-pesquisa.mp4`](docs/demo-pesquisa.mp4).
+- Vídeo demonstrativo original: [`docs/demo-crud.mp4`](docs/demo-crud.mp4).
